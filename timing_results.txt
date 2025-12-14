@@ -1,0 +1,7 @@
+# Algorithm Timing Results
+# Format: algorithm_name, version (sequential/parallel), test_number, time_seconds
+
+# Example:
+# bfs_sequential, sequential, 1, 0.1234
+# bfs_parallel, parallel, 1, 0.0456
+
