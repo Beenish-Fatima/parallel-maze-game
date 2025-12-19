@@ -1,10 +1,9 @@
 import time, heapq, threading
 from utils import neighbors
+from queue import PriorityQueue
 
 THREAD_COLORS = [
-    "#ffd54f", "#4fc3f7", "#ce93d8", "#80cbc4",
-    "#ffab91", "#a5d6a7", "#f48fb1", "#bcaaa4",
-    "#9fa8da", "#ffcc80", "#b39ddb", "#ff8a65"
+   "#ff8a65"
 ]
 
 def dijkstra_parallel(start, goal, n, walls, get_edge_weight,
@@ -12,28 +11,22 @@ def dijkstra_parallel(start, goal, n, walls, get_edge_weight,
                       speed, stop_event, num_threads=4):
 
     t0 = time.time()
-
-    lock = threading.Lock()
-    pq = [(0, start)]
+    pq = PriorityQueue()
+    pq.put((0, start))
     dist = {start: 0}
     parent = {start: None}
-
-    active_threads = [True] * num_threads
+    lock = threading.Lock()
 
     def worker(tid):
         color = THREAD_COLORS[tid % len(THREAD_COLORS)]
-
         while not stop_event.is_set():
-
-            with lock:
-                if pq:
-                    cost, curr = heapq.heappop(pq)
-                else:
-                    active_threads[tid] = False
-                    return
+            try:
+                cost, curr = pq.get(timeout=0.1)
+            except:
+                return
 
             draw_cell(curr, color)
-
+            time.sleep(speed)
             if curr == goal:
                 stop_event.set()
                 return
@@ -41,16 +34,14 @@ def dijkstra_parallel(start, goal, n, walls, get_edge_weight,
             for nx in neighbors(curr, n):
                 if nx in walls:
                     continue
-
                 w = get_edge_weight(curr, nx)
                 new_cost = cost + w
-
                 with lock:
                     if nx not in dist or new_cost < dist[nx]:
                         dist[nx] = new_cost
                         parent[nx] = curr
-                        heapq.heappush(pq, (new_cost, nx))
-
+                        pq.put((new_cost, nx))
+                
     threads = []
     for i in range(num_threads):
         t = threading.Thread(target=worker, args=(i,), daemon=True)

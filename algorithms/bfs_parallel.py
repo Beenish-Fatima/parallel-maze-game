@@ -6,7 +6,7 @@ def worker(q, visited, walls, n, draw_cell, stop_event):
     while not q.empty() and not stop_event.is_set():
         curr = q.get()
 
-        draw_cell(curr, "#ADD8E6")
+        draw_cell(curr, "#FB9070")
 
         for nx in neighbors(curr, n):
             if nx in walls:

@@ -18,6 +18,6 @@ def in_bounds(x,y,n):
 
 def heavy_work():
     x = 1.0
-    for _ in range(50000):  # increase number for even slower sequential
+    for _ in range(50000): 
         x = x * 1.0000001
     return x

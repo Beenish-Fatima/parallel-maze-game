@@ -17,7 +17,7 @@ def dijkstra_sequential(start, goal, n, walls, get_edge_weight,
 
         heavy_work()  # 🔥 guarantees slow sequential execution
 
-        draw_cell(curr, "#A3E4D7")
+        draw_cell(curr, "#92F1CE")
 
         if curr == goal:
             break

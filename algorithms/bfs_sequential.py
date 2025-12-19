@@ -17,7 +17,7 @@ def bfs_sequential(start, goal, n, walls, get_edge_weight,
         # slow sequential version
         time.sleep(0.001)
 
-        draw_cell(curr, "#87CEFA")
+        draw_cell(curr, "#FB9070")
 
         if curr == goal:
             break
